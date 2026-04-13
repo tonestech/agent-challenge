@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun add:*)",
+      "Bash(bunx tsc:*)",
+      "Bash(bun run:*)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://token.jup.ag/all\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://api.jup.ag/price/v2?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://api.dexscreener.com/latest/dex/tokens/DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://mainnet.helius-rpc.com\")",
+      "Bash(curl -s \"https://api.jup.ag/price/v2?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s \"https://api.jup.ag/price?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -sv \"https://api.jup.ag/price?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s \"https://lite-api.jup.ag/price/v2?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s \"https://api.jup.ag/tokens/v1\")",
+      "Bash(curl -sv \"https://api.jup.ag/tokens/v1\")",
+      "Bash(curl -s \"https://api.jup.ag/\")",
+      "Bash(curl -sv \"https://api.jup.ag/\")",
+      "Bash(curl -s \"https://public.jupiterapi.com/price/v2?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -sv \"https://public.jupiterapi.com/price/v2?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s \"https://price.jup.ag/v6/price?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -sv \"https://price.jup.ag/v6/price?ids=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263\")",
+      "Bash(curl -s \"https://api.jup.ag/swap/v1/quote?inputMint=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=1000000\")",
+      "Bash(curl -s \"https://api.jup.ag/tokens/v1/solana\")",
+      "Bash(curl -sv \"https://api.jup.ag/tokens/v1/solana\")",
+      "Bash(curl -s -w \"\\\\n%{http_code}\" \"https://api.jup.ag/tokens/v1/solana\")",
+      "Bash(curl -s -w \"\\\\n%{http_code}\" \"https://tokens.jup.ag/tokens?tags=verified\")",
+      "Bash(curl -s -w \"\\\\n%{http_code}\" \"https://api.jup.ag/tokens/v1/strict\")",
+      "Bash(curl -s \"https://api.coingecko.com/api/v3/coins/solana\")",
+      "WebSearch"
+    ]
+  }
+}
