@@ -27,7 +27,8 @@
       "Bash(curl -s -w \"\\\\n%{http_code}\" \"https://tokens.jup.ag/tokens?tags=verified\")",
       "Bash(curl -s -w \"\\\\n%{http_code}\" \"https://api.jup.ag/tokens/v1/strict\")",
       "Bash(curl -s \"https://api.coingecko.com/api/v3/coins/solana\")",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npx tsc:*)"
     ]
   }
 }
