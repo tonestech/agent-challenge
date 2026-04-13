@@ -101,19 +101,11 @@ function formatSummary(analysis: TokenAnalysis): string {
 export const analyzeTokenAction: Action = {
   name: "ANALYZE_SOLANA_TOKEN",
   description:
-    "MANDATORY action when user mentions any Solana token by symbol (BONK, WIF, JUP, etc.) or mint address. Fetches live on-chain data from Helius and market data from DexScreener. Never answer questions about Solana tokens without invoking this action first — the agent must NOT rely on training knowledge for token data.",
+    "Fetches live on-chain data (Helius) and market data (DexScreener) for a Solana token given a symbol or mint address.",
   similes: [
     "ANALYZE_TOKEN",
     "CHECK_TOKEN",
     "RUG_CHECK",
-    "TOKEN_SCAN",
-    "INVESTIGATE_TOKEN",
-    "DD_TOKEN",
-    "DUE_DILIGENCE",
-    "SCAN_TOKEN",
-    "TOKEN_INFO",
-    "ANALYZE_SOLANA",
-    "CHECK_SOL_TOKEN",
   ],
 
   validate: async (
@@ -303,71 +295,6 @@ export const analyzeTokenAction: Action = {
         name: "Scout",
         content: {
           text: "Running due diligence on that mint...",
-          actions: ["ANALYZE_SOLANA_TOKEN"],
-        },
-      } as ActionExample,
-    ],
-    [
-      {
-        name: "{{user1}}",
-        content: { text: "is WIF safe?" },
-      } as ActionExample,
-      {
-        name: "Scout",
-        content: {
-          text: "Let me check WIF's on-chain fundamentals.",
-          actions: ["ANALYZE_SOLANA_TOKEN"],
-        },
-      } as ActionExample,
-    ],
-    [
-      {
-        name: "{{user1}}",
-        content: { text: "rug check JUP" },
-      } as ActionExample,
-      {
-        name: "Scout",
-        content: {
-          text: "Scanning JUP for red flags.",
-          actions: ["ANALYZE_SOLANA_TOKEN"],
-        },
-      } as ActionExample,
-    ],
-    [
-      {
-        name: "{{user1}}",
-        content: { text: "what do you think of POPCAT" },
-      } as ActionExample,
-      {
-        name: "Scout",
-        content: {
-          text: "Pulling POPCAT's data now.",
-          actions: ["ANALYZE_SOLANA_TOKEN"],
-        },
-      } as ActionExample,
-    ],
-    [
-      {
-        name: "{{user1}}",
-        content: { text: "scan SOL" },
-      } as ActionExample,
-      {
-        name: "Scout",
-        content: {
-          text: "Fetching SOL's on-chain metrics...",
-          actions: ["ANALYZE_SOLANA_TOKEN"],
-        },
-      } as ActionExample,
-    ],
-    [
-      {
-        name: "{{user1}}",
-        content: { text: "do a DD on WEN" },
-      } as ActionExample,
-      {
-        name: "Scout",
-        content: {
-          text: "Running due diligence on WEN.",
           actions: ["ANALYZE_SOLANA_TOKEN"],
         },
       } as ActionExample,

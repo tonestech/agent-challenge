@@ -28,7 +28,11 @@
       "Bash(curl -s -w \"\\\\n%{http_code}\" \"https://api.jup.ag/tokens/v1/strict\")",
       "Bash(curl -s \"https://api.coingecko.com/api/v3/coins/solana\")",
       "WebSearch",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(xargs grep:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\Projetos\\Tones Tech\\Superteam\\SolAgent\\agent-challenge\\src"
     ]
   }
 }
