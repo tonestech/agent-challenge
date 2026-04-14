@@ -1,0 +1,33 @@
+{
+  "version": "0.1",
+  "type": "container",
+  "meta": {
+    "trigger": "dashboard"
+  },
+  "ops": [
+    {
+      "type": "container/run",
+      "id": "scout",
+      "args": {
+        "cmd": [],
+        "image": "docker.io/tonestech/scout:latest",
+        "expose": 3001,
+        "env": {
+          "OPENAI_API_KEY": "nosana",
+          "OPENAI_BASE_URL": "https://5i8frj7ann99bbw9gzpprvzj2esugg39hxbb4unypskq.node.k8s.prd.nos.ci/v1",
+          "OPENAI_SMALL_MODEL": "Qwen3.5-9B-FP8",
+          "OPENAI_LARGE_MODEL": "Qwen3.5-9B-FP8",
+          "OPENAI_EMBEDDING_API_KEY": "nosana",
+          "OPENAI_EMBEDDING_BASE_URL": "https://4yiccatpyxx773jtewo5ccwhw1s2hezq5pehndb6fcfq.node.k8s.prd.nos.ci/v1",
+          "OPENAI_EMBEDDING_MODEL": "Qwen3-Embedding-0.6B",
+          "OPENAI_EMBEDDING_DIMENSIONS": "1024",
+          "HELIUS_API_KEY": "REPLACE_WITH_ACTUAL_KEY_AT_DEPLOY",
+          "SECRET_SALT": "scout-due-diligence-solana-2026-random-salt-abc123",
+          "SERVER_PORT": "3000",
+          "SIDECAR_PORT": "3001",
+          "NODE_ENV": "production"
+        }
+      }
+    }
+  ]
+}
