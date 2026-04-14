@@ -1,7 +1,13 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 import "dotenv/config";
 import { analyzeToken } from "./lib/analyzer";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const PORT = Number(process.env.SIDECAR_PORT ?? 3001);
 const app = express();
@@ -28,6 +34,19 @@ app.post("/api/scout/analyze", async (req, res) => {
     res.status(500).json({ error: message, code: "ANALYSIS_FAILED" });
   }
 });
+
+const uiDistPath = path.resolve(__dirname, "../ui/dist");
+const uiExists = fs.existsSync(path.join(uiDistPath, "index.html"));
+
+if (uiExists) {
+  app.use(express.static(uiDistPath));
+  app.get(/^(?!\/api|\/health).*/, (_req, res) => {
+    res.sendFile(path.join(uiDistPath, "index.html"));
+  });
+  console.log(`[Scout Sidecar] Serving UI from ${uiDistPath}`);
+} else {
+  console.log(`[Scout Sidecar] UI dist not found — run 'bun run ui:build' to enable static serving`);
+}
 
 app.listen(PORT, () => {
   console.log(`[Scout Sidecar] Listening on http://localhost:${PORT}`);

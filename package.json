@@ -9,7 +9,10 @@
     "dev": "concurrently -n eliza,sidecar -c blue,green \"bun run dev:eliza\" \"bun run dev:sidecar\"",
     "dev:eliza": "elizaos dev",
     "dev:sidecar": "bun --watch src/sidecar.ts",
-    "sidecar": "bun src/sidecar.ts"
+    "sidecar": "bun src/sidecar.ts",
+    "ui:dev": "cd ui && npm run dev",
+    "ui:build": "cd ui && npm run build",
+    "dev:all": "concurrently -n eliza,sidecar,ui -c blue,green,yellow \"bun run dev:eliza\" \"bun run dev:sidecar\" \"bun run ui:dev\""
   },
   "dependencies": {
     "@elizaos/core": "^1.0.0",
