@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import type { AnalyzeResponse } from "../types";
-import { formatAge } from "../lib/format";
+import { formatAge, shortAddress } from "../lib/format";
 
 interface Props {
   analysis: AnalyzeResponse["analysis"];
@@ -101,15 +101,20 @@ export function TokenHeader({ analysis }: Props) {
   const firstLetter = (token.symbol || token.name || "?").charAt(0).toUpperCase();
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
+    <div className="relative bg-zinc-900 border border-zinc-800 rounded-lg overflow-hidden">
       {info?.header && (
         <div
-          className="h-24 w-full bg-cover bg-center opacity-30"
-          style={{ backgroundImage: `url(${info.header})` }}
+          className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none"
           aria-hidden="true"
-        />
+        >
+          <div
+            className="absolute inset-0 bg-cover bg-center opacity-15"
+            style={{ backgroundImage: `url(${info.header})` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-zinc-900/40 via-zinc-900/80 to-zinc-900" />
+        </div>
       )}
-      <div className="p-5 space-y-4">
+      <div className="relative z-10 p-5 space-y-4">
         <div className="flex items-start gap-4 flex-wrap">
           {logoSrc ? (
             <img
@@ -137,18 +142,19 @@ export function TokenHeader({ analysis }: Props) {
               )}
             </div>
             <div className="flex items-center gap-2 flex-wrap">
-              <code className="text-xs font-mono text-zinc-500 break-all">
-                {token.address}
-              </code>
               <button
                 type="button"
                 onClick={copyAddress}
-                className="text-xs text-zinc-500 hover:text-amber-400 flex items-center gap-1 transition-colors"
+                className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 font-mono text-xs text-zinc-400 hover:text-zinc-200 transition"
+                title={token.address}
                 aria-label="Copy address"
               >
+                <span>{shortAddress(token.address)}</span>
                 <IconCopy />
-                <span className="font-mono">{copied ? "copied" : "copy"}</span>
               </button>
+              {copied && (
+                <span className="text-xs font-mono text-emerald-400">copied</span>
+              )}
               {ds?.url && (
                 <a
                   href={ds.url}

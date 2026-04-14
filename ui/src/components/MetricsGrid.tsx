@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
 import type { AnalyzeResponse } from "../types";
 import {
   formatAge,
+  formatLargeCount,
   formatNumber,
   formatPct,
   formatPrice,
@@ -14,10 +16,45 @@ interface Props {
 
 interface Card {
   label: string;
-  value: string;
+  value: ReactNode;
   valueClass?: string;
   sub?: string;
   subClass?: string;
+}
+
+function IconCheck() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M3 8.5L6.5 12L13 5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconWarningTriangle() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path
+        d="M8 2L14.5 13.5H1.5L8 2Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 6.5V9.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <circle cx="8" cy="11.5" r="0.8" fill="currentColor" />
+    </svg>
+  );
 }
 
 function Cell({ card }: { card: Card }) {
@@ -38,7 +75,7 @@ function Cell({ card }: { card: Card }) {
   );
 }
 
-function isMeaningful(v: string): boolean {
+function isMeaningfulString(v: string): boolean {
   return v !== "" && v !== "—";
 }
 
@@ -50,7 +87,7 @@ export function MetricsGrid({ analysis }: Props) {
 
   // Price + h24 change
   const price = formatPrice(market.priceUsd);
-  if (isMeaningful(price)) {
+  if (isMeaningfulString(price)) {
     const change = ds?.priceChange?.h24;
     let sub: string | undefined;
     let subClass: string | undefined;
@@ -63,20 +100,20 @@ export function MetricsGrid({ analysis }: Props) {
   }
 
   const liq = formatUsd(market.liquidityUsd);
-  if (isMeaningful(liq)) cards.push({ label: "Liquidity", value: liq });
+  if (isMeaningfulString(liq)) cards.push({ label: "Liquidity", value: liq });
 
   const mcap = formatUsd(ds?.marketCap);
-  if (isMeaningful(mcap)) cards.push({ label: "Market Cap", value: mcap });
+  if (isMeaningfulString(mcap)) cards.push({ label: "Market Cap", value: mcap });
 
   const vol = formatUsd(market.volume24hUsd);
-  if (isMeaningful(vol)) {
+  if (isMeaningfulString(vol)) {
     const txns = ds?.txns?.h24;
     const sub = txns ? `${formatNumber(txns.buys)} buys · ${formatNumber(txns.sells)} sells` : undefined;
     cards.push({ label: "24h Volume", value: vol, sub });
   }
 
   const age = formatAge(ageSeconds);
-  if (isMeaningful(age)) {
+  if (isMeaningfulString(age)) {
     let sub: string | undefined;
     if (ds?.pairCreatedAt) {
       const d = new Date(ds.pairCreatedAt);
@@ -88,31 +125,55 @@ export function MetricsGrid({ analysis }: Props) {
   }
 
   const topHolder = formatPct(holders.topHolderPercent);
-  if (isMeaningful(topHolder)) cards.push({ label: "Top Holder", value: topHolder });
+  if (isMeaningfulString(topHolder)) cards.push({ label: "Top Holder", value: topHolder });
 
   const top10 = formatPct(holders.top10Percent);
-  if (isMeaningful(top10)) cards.push({ label: "Top 10 Holders", value: top10 });
+  if (isMeaningfulString(top10)) cards.push({ label: "Top 10 Holders", value: top10 });
 
   if (authorities.mint === null) {
-    cards.push({ label: "Mint Authority", value: "Revoked", valueClass: "text-emerald-400" });
+    cards.push({
+      label: "Mint Authority",
+      value: (
+        <span className="inline-flex items-center gap-1.5 text-emerald-400">
+          <IconCheck />
+          Revoked
+        </span>
+      ),
+    });
   } else if (authorities.mint) {
     cards.push({
       label: "Mint Authority",
-      value: shortAddress(authorities.mint),
-      valueClass: "text-red-400 text-base",
-      sub: "Active",
+      value: (
+        <span className="inline-flex items-center gap-1.5 text-red-400 text-base">
+          <IconWarningTriangle />
+          {shortAddress(authorities.mint)}
+        </span>
+      ),
+      sub: "ACTIVE — holder can mint",
       subClass: "text-red-400 font-mono",
     });
   }
 
   if (authorities.freeze === null) {
-    cards.push({ label: "Freeze Authority", value: "Revoked", valueClass: "text-emerald-400" });
+    cards.push({
+      label: "Freeze Authority",
+      value: (
+        <span className="inline-flex items-center gap-1.5 text-emerald-400">
+          <IconCheck />
+          Revoked
+        </span>
+      ),
+    });
   } else if (authorities.freeze) {
     cards.push({
       label: "Freeze Authority",
-      value: shortAddress(authorities.freeze),
-      valueClass: "text-red-400 text-base",
-      sub: "Active",
+      value: (
+        <span className="inline-flex items-center gap-1.5 text-red-400 text-base">
+          <IconWarningTriangle />
+          {shortAddress(authorities.freeze)}
+        </span>
+      ),
+      sub: "ACTIVE — holder can freeze",
       subClass: "text-red-400 font-mono",
     });
   }
@@ -123,14 +184,18 @@ export function MetricsGrid({ analysis }: Props) {
     const mcapNum = ds?.marketCap;
     const diffPct =
       mcapNum && mcapNum > 0 ? Math.abs(ds.fdv - mcapNum) / mcapNum : 1;
-    if (isMeaningful(fdvVal) && diffPct > 0.05) {
+    if (isMeaningfulString(fdvVal) && diffPct > 0.05) {
       cards.push({ label: "FDV", value: fdvVal });
     }
   }
 
-  const supply = formatNumber(token.supply);
-  if (isMeaningful(supply)) {
-    cards.push({ label: "Supply", value: supply, sub: `${token.decimals} decimals` });
+  const supply = formatLargeCount(token.supply);
+  if (isMeaningfulString(supply)) {
+    cards.push({
+      label: "Supply",
+      value: supply,
+      sub: `${token.symbol} · ${token.decimals} decimals`,
+    });
   }
 
   if (cards.length === 0) return null;

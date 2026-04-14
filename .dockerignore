@@ -1,51 +1,21 @@
-# Git
+node_modules
+ui/node_modules
+ui/dist
+.eliza
 .git
 .gitignore
-
-# Node
-node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Environment files
+.env
 .env.local
-.env.example
 .env.*.local
-.env.*
-
-# Build output
-.mastra/
-dist/
-build/
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Documentation
+*.log
+dist
+coverage
+.vscode
+.idea
+docker-compose*.yml
+.github
 *.md
-LICENSE
-
-# Docker
+!README.md
+!README.Docker.md
 Dockerfile
 .dockerignore
-
-# Temporary files
-*.tmp
-*.temp
-.cache/
-
-# Test files
-coverage/
-.nyc_output/
-*.test.js
-*.spec.js

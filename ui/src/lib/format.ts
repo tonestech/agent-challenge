@@ -34,6 +34,15 @@ export function formatNumber(n: number | null | undefined): string {
   return n.toLocaleString("en-US");
 }
 
+export function formatLargeCount(n: number | null | undefined): string {
+  if (n == null || !isFinite(n)) return "—";
+  if (n >= 1e12) return `${(n / 1e12).toFixed(2)}T`;
+  if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
+  if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
+  return n.toLocaleString("en-US");
+}
+
 export function formatAge(seconds: number | null | undefined): string {
   if (seconds == null) return "—";
   const days = Math.floor(seconds / 86400);

@@ -12,7 +12,14 @@
     "sidecar": "bun src/sidecar.ts",
     "ui:dev": "cd ui && npm run dev",
     "ui:build": "cd ui && npm run build",
-    "dev:all": "concurrently -n eliza,sidecar,ui -c blue,green,yellow \"bun run dev:eliza\" \"bun run dev:sidecar\" \"bun run ui:dev\""
+    "dev:all": "concurrently -n eliza,sidecar,ui -c blue,green,yellow \"bun run dev:eliza\" \"bun run dev:sidecar\" \"bun run ui:dev\"",
+    "docker:build": "docker build -t tonestech/scout:latest .",
+    "docker:run": "docker run --rm --env-file .env -p 3000:3000 -p 3001:3001 tonestech/scout:latest",
+    "docker:run:detached": "docker run -d --name scout --env-file .env -p 3000:3000 -p 3001:3001 tonestech/scout:latest",
+    "docker:logs": "docker logs -f scout",
+    "docker:stop": "docker stop scout && docker rm scout",
+    "docker:push": "docker push tonestech/scout:latest",
+    "docker:shell": "docker run --rm -it --env-file .env --entrypoint sh tonestech/scout:latest"
   },
   "dependencies": {
     "@elizaos/core": "^1.0.0",
@@ -21,7 +28,8 @@
     "@elizaos/plugin-openai": "1.0.0",
     "@solana/web3.js": "^1.98.4",
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "tsx": "^4.21.0"
   },
   "devDependencies": {
     "@elizaos/cli": "^1.0.0",

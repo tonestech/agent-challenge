@@ -44,19 +44,16 @@ export function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="sticky top-0 z-10 bg-zinc-950/90 backdrop-blur border-b border-zinc-900">
-        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center gap-3 flex-wrap">
+      <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex items-baseline gap-3 flex-wrap">
           <div className="flex items-center gap-2">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-60"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-            </span>
-            <h1 className="font-mono text-xl font-semibold text-amber-400 tracking-tight">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="font-mono text-amber-400 font-medium tracking-widest text-base">
               SCOUT
-            </h1>
+            </span>
           </div>
-          <span className="text-xs font-mono uppercase tracking-wider text-zinc-500">
-            due diligence for solana tokens
+          <span className="text-zinc-500 text-xs uppercase tracking-wider">
+            Due diligence for Solana tokens
           </span>
         </div>
       </header>
@@ -76,15 +73,9 @@ export function App() {
         {status === "success" && result && <ResultPanel data={result} />}
       </main>
 
-      <footer className="border-t border-zinc-900 py-6">
-        <div className="max-w-4xl mx-auto px-4 flex items-center justify-between flex-wrap gap-2 text-xs font-mono text-zinc-500">
-          <span>
-            {result
-              ? `Analyzed in ${(result.durationMs / 1000).toFixed(1)}s`
-              : "Built for the Nosana + ElizaOS Builders Challenge"}
-          </span>
-          <span>Powered by Nosana · ElizaOS Builders Challenge</span>
-        </div>
+      <footer className="max-w-4xl mx-auto px-6 py-8 mt-12 border-t border-zinc-900 text-zinc-600 text-xs font-mono text-center">
+        {result && <>Analyzed in {(result.durationMs / 1000).toFixed(1)}s · </>}
+        Powered by Nosana · ElizaOS Builders Challenge
       </footer>
     </div>
   );

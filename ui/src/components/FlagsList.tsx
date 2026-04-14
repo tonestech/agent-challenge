@@ -43,9 +43,9 @@ export function FlagsList({ flags }: Props) {
 
   return (
     <div className="space-y-3">
-      <div className="text-xs font-mono uppercase tracking-wider text-amber-400">
-        Red Flags
-      </div>
+      <h2 className="text-amber-400 font-mono text-xs uppercase tracking-widest mb-3">
+        Signals
+      </h2>
       <div className="space-y-3">
         {sorted.map((flag, i) => {
           const s = STYLES[flag.severity] ?? STYLES.LOW;

@@ -18,7 +18,12 @@ export function ResultPanel({ data }: Props) {
         <VerdictCard verdict={data.verdict} />
       </div>
       <FlagsList flags={data.flags} />
-      <MetricsGrid analysis={data.analysis} />
+      <div>
+        <h2 className="text-amber-400 font-mono text-xs uppercase tracking-widest mb-3">
+          On-chain metrics
+        </h2>
+        <MetricsGrid analysis={data.analysis} />
+      </div>
     </div>
   );
 }
