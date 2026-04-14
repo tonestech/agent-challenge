@@ -56,8 +56,9 @@ export function evaluateRedFlags(analysis: TokenAnalysis): RedFlagResult {
   }
 
   // ── HIGH ────────────────────────────────────────────────────────
+  // If data is missing, skip the rule rather than assume safe or unsafe.
 
-  if (analysis.holders.topHolderPercent > 30) {
+  if (analysis.holders.topHolderPercent != null && analysis.holders.topHolderPercent > 30) {
     flags.push({
       severity: "HIGH",
       title: "Extreme holder concentration",
@@ -66,7 +67,7 @@ export function evaluateRedFlags(analysis: TokenAnalysis): RedFlagResult {
     });
   }
 
-  if (analysis.holders.top10Percent > 60) {
+  if (analysis.holders.top10Percent != null && analysis.holders.top10Percent > 60) {
     flags.push({
       severity: "HIGH",
       title: "High concentration among top 10",
@@ -127,6 +128,7 @@ export function evaluateRedFlags(analysis: TokenAnalysis): RedFlagResult {
 
   // ── POSITIVE ────────────────────────────────────────────────────
 
+  // If data is missing, skip the rule rather than assume safe or unsafe.
   if (
     analysis.authorities.mint === null &&
     analysis.authorities.freeze === null &&
@@ -135,7 +137,8 @@ export function evaluateRedFlags(analysis: TokenAnalysis): RedFlagResult {
     analysis.ageSeconds !== null &&
     analysis.ageSeconds > 2_592_000 &&
     analysis.holders.topHolderPercent !== null &&
-    analysis.holders.topHolderPercent < 20
+    analysis.holders.topHolderPercent < 20 &&
+    analysis.holders.top10Percent !== null
   ) {
     flags.push({
       severity: "POSITIVE",

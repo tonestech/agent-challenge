@@ -19,8 +19,8 @@ export interface TokenAnalysis {
     freeze: string | null;
   };
   holders: {
-    topHolderPercent: number;
-    top10Percent: number;
+    topHolderPercent: number | null;
+    top10Percent: number | null;
     totalHolders: number | null;
   };
   market: {
@@ -106,7 +106,7 @@ export interface DexScreenerResponse {
 // ── Holder summary (internal) ───────────────────────────────────────
 
 export interface HolderSummary {
-  topHolderPercent: number;
-  top10Percent: number;
+  topHolderPercent: number | null;
+  top10Percent: number | null;
   totalHolders: number | null;
 }

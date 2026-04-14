@@ -85,8 +85,8 @@ function formatSummary(analysis: TokenAnalysis): string {
     `Mint Authority: ${mintStatus}`,
     `Freeze Authority: ${freezeStatus}`,
     ``,
-    `Top Holder: ${holders.topHolderPercent}%`,
-    `Top 10 Holders: ${holders.top10Percent}%`,
+    `Top Holder: ${holders.topHolderPercent != null ? `${holders.topHolderPercent}%` : "N/A"}`,
+    `Top 10 Holders: ${holders.top10Percent != null ? `${holders.top10Percent}%` : "N/A"}`,
     ``,
     `Price: ${price}`,
     `Liquidity: ${liq}`,
@@ -198,9 +198,9 @@ export const analyzeTokenAction: Action = {
 
       const holders: HolderSummary = unwrap(
         holdersResult,
-        { topHolderPercent: 0, top10Percent: 0, totalHolders: null },
+        null,
         "holders",
-      );
+      ) ?? { topHolderPercent: null, top10Percent: null, totalHolders: null };
 
       const dexData: DexScreenerPair | null = unwrap(dexResult, null, "dexScreener");
 

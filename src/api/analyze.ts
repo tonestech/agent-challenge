@@ -1,3 +1,4 @@
+// NOTE: Plugin route loading is unreliable in this ElizaOS version. Live endpoint is in src/sidecar.ts.
 /**
  * POST /api/scout/analyze — HTTP endpoint for token analysis.
  *
@@ -62,7 +63,7 @@ function unwrap<T>(
 
 export const analyzeOptionsRoute: Route = {
   type: "OPTIONS" as Route["type"],
-  path: "/api/scout/analyze",
+  path: "/scout/analyze",
   handler: async (_req: RouteRequest, res: RouteResponse) => {
     setCorsHeaders(res);
     res.status(204).end();
@@ -73,7 +74,7 @@ export const analyzeOptionsRoute: Route = {
 
 export const analyzeRoute: Route = {
   type: "POST",
-  path: "/api/scout/analyze",
+  path: "/scout/analyze",
   handler: async (req: RouteRequest, res: RouteResponse, runtime: IAgentRuntime) => {
     setCorsHeaders(res);
     const startMs = Date.now();
@@ -127,9 +128,9 @@ export const analyzeRoute: Route = {
       const metadata: HeliusDasAsset = metaResult.value;
       const holders: HolderSummary = unwrap(
         holdersResult,
-        { topHolderPercent: 0, top10Percent: 0, totalHolders: null },
+        null,
         "holders",
-      );
+      ) ?? { topHolderPercent: null, top10Percent: null, totalHolders: null };
       const dexData: DexScreenerPair | null = unwrap(dexResult, null, "dexScreener");
 
       const supply = metadata.token_info?.supply ?? 0;

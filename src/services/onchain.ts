@@ -87,32 +87,59 @@ export async function fetchTokenMetadata(
 export async function fetchTopHolders(
   mint: string,
   heliusUrl: string,
-): Promise<HolderSummary> {
-  const [largestAccounts, supply] = await Promise.all([
-    rpcCall<TokenLargestAccountsResult>(heliusUrl, "getTokenLargestAccounts", [mint]),
-    rpcCall<TokenSupplyResult>(heliusUrl, "getTokenSupply", [mint]),
-  ]);
+): Promise<HolderSummary | null> {
+  const MAX_RETRIES = 3;
+  const BACKOFF_MS = [500, 1000, 2000];
 
-  const totalSupply = supply.value.uiAmount;
-  const holders = largestAccounts.value;
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const [largestAccounts, supply] = await Promise.all([
+        rpcCall<TokenLargestAccountsResult>(heliusUrl, "getTokenLargestAccounts", [mint]),
+        rpcCall<TokenSupplyResult>(heliusUrl, "getTokenSupply", [mint]),
+      ]);
 
-  if (!holders.length || totalSupply <= 0) {
-    return { topHolderPercent: 0, top10Percent: 0, totalHolders: null };
+      const totalSupply = supply.value.uiAmount;
+      const holders = largestAccounts.value;
+
+      if (!holders.length || totalSupply <= 0) {
+        return { topHolderPercent: 0, top10Percent: 0, totalHolders: null };
+      }
+
+      // Sort descending by uiAmount
+      const sorted = [...holders].sort((a, b) => b.uiAmount - a.uiAmount);
+
+      const topHolderPercent = (sorted[0].uiAmount / totalSupply) * 100;
+      const top10 = sorted.slice(0, 10);
+      const top10Sum = top10.reduce((sum, h) => sum + h.uiAmount, 0);
+      const top10Percent = (top10Sum / totalSupply) * 100;
+
+      return {
+        topHolderPercent: Math.round(topHolderPercent * 100) / 100,
+        top10Percent: Math.round(top10Percent * 100) / 100,
+        totalHolders: null, // standard RPC doesn't return total count
+      };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const isOverloaded = msg.includes("code -32603");
+
+      if (isOverloaded && attempt < MAX_RETRIES) {
+        const delay = BACKOFF_MS[attempt];
+        console.warn(`[Scout] Helius -32603, retry ${attempt + 1}/${MAX_RETRIES} in ${delay}ms...`);
+        await new Promise((r) => setTimeout(r, delay));
+        continue;
+      }
+
+      // Non-retryable error or retries exhausted
+      if (isOverloaded) {
+        console.warn(`[Scout] Helius -32603 persisted after ${MAX_RETRIES} retries, returning null`);
+      } else {
+        console.warn(`[Scout] fetchTopHolders failed (non-retryable): ${msg}`);
+      }
+      return null;
+    }
   }
 
-  // Sort descending by uiAmount
-  const sorted = [...holders].sort((a, b) => b.uiAmount - a.uiAmount);
-
-  const topHolderPercent = (sorted[0].uiAmount / totalSupply) * 100;
-  const top10 = sorted.slice(0, 10);
-  const top10Sum = top10.reduce((sum, h) => sum + h.uiAmount, 0);
-  const top10Percent = (top10Sum / totalSupply) * 100;
-
-  return {
-    topHolderPercent: Math.round(topHolderPercent * 100) / 100,
-    top10Percent: Math.round(top10Percent * 100) / 100,
-    totalHolders: null, // standard RPC doesn't return total count
-  };
+  return null; // unreachable, but satisfies TypeScript
 }
 
 export async function fetchDexScreenerData(

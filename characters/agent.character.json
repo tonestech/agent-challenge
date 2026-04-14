@@ -2,8 +2,7 @@
   "name": "Scout",
   "username": "scout",
   "plugins": [
-    "@elizaos/plugin-bootstrap",
-    "@elizaos/plugin-openai"
+    "@elizaos/plugin-bootstrap"
   ],
   "settings": {
     "model": "Qwen3.5-9B-FP8",
